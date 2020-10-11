@@ -600,7 +600,7 @@ open class TerminalView: NSView, NSTextInputClient, NSUserInterfaceValidations {
             }
             break;
         default:
-            print ("Unhandle selector \(selector)")
+            print ("Unhandled selector \(selector)")
         }
     }
     
