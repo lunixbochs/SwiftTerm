@@ -17,8 +17,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4936D21C24512A98005CEE27 /* SwiftSH.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSH.framework; path = ../../../../private/tmp/SwiftSH.framework; sourceTree = "<group>"; };
-		4936D22E2451386F005CEE27 /* SwiftSH.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSH.framework; path = SwiftSH.binaries/SwiftSH.framework; sourceTree = "<group>"; };
 		49C75E3F2419C7E9008977FE /* MacTerminal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTerminal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C75E432419C7E9008977FE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		49C75E452419C7E9008977FE /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
@@ -46,8 +44,6 @@
 		49AE019F2410AB0A0051E902 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4936D22E2451386F005CEE27 /* SwiftSH.framework */,
-				4936D21C24512A98005CEE27 /* SwiftSH.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -94,6 +90,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49C75E4E2419C7E9008977FE /* Build configuration list for PBXNativeTarget "MacTerminal" */;
 			buildPhases = (
+				BD5D12872533CC35009EC0EB /* ShellScript */,
 				49C75E3B2419C7E9008977FE /* Sources */,
 				49C75E3C2419C7E9008977FE /* Frameworks */,
 				49C75E3D2419C7E9008977FE /* Resources */,
@@ -118,7 +115,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Miguel de Icaza";
 				TargetAttributes = {
 					49C75E3E2419C7E9008977FE = {
@@ -155,6 +152,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BD5D12872533CC35009EC0EB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "which swiftformat &>/dev/null && swiftformat --swiftversion 5.3 .\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49C75E3B2419C7E9008977FE /* Sources */ = {
@@ -215,6 +232,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -277,6 +295,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -316,7 +335,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = PJQC57N853;
+				DEVELOPMENT_TEAM = D7SCFBXQXZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(PRODUCT_NAME)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -338,7 +357,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = PJQC57N853;
+				DEVELOPMENT_TEAM = D7SCFBXQXZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(PRODUCT_NAME)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

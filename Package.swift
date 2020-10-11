@@ -6,11 +6,11 @@ let package = Package(
     name: "SwiftTerm",
     platforms: [
         .iOS(.v13),
-        .macOS(.v10_15)
+        .macOS(.v10_15),
     ],
     products: [
         .executable(name: "SwiftTermFuzz", targets: ["SwiftTermFuzz"]),
-        //.executable(name: "CaptureOutput", targets: ["CaptureOutput"]),
+        // .executable(name: "CaptureOutput", targets: ["CaptureOutput"]),
         .library(
             name: "SwiftTerm",
             targets: ["SwiftTerm"]
@@ -23,7 +23,7 @@ let package = Package(
             dependencies: [],
             path: "Sources/SwiftTerm"
         ),
-        .target (
+        .target(
             name: "SwiftTermFuzz",
             dependencies: ["SwiftTerm"],
             path: "Sources/SwiftTermFuzz"
@@ -32,11 +32,11 @@ let package = Package(
 //            name: "CaptureOutput",
 //            dependencies: ["SwiftTerm"],
 //            path: "Sources/CaptureOutput"
-//        ),        
+//        ),
         .testTarget(
             name: "SwiftTermTests",
             dependencies: ["SwiftTerm"],
             path: "Tests/SwiftTermTests"
-        )
+        ),
     ]
 )

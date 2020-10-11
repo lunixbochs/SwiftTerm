@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  
+//
 //  This file has two purposes, one it provides the entry point for the
 //  fuzzer, and second, it runs through a battery of tests from the fuzzer
 //  they are run separately.
@@ -18,32 +18,29 @@ import SwiftTerm
 var queue = DispatchQueue(label: "Runner", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
 
 // Fuzzer entry point
-@_cdecl("LLVMFuzzerTestOneInput") public func fuzzMe(data: UnsafePointer<UInt8>, length: CInt) -> CInt{
-    
-    let h = HeadlessTerminal (queue: queue) { exitCode in }
-    
+@_cdecl("LLVMFuzzerTestOneInput") public func fuzzMe(data: UnsafePointer<UInt8>, length: CInt) -> CInt {
+    let h = HeadlessTerminal(queue: queue) { _ in }
+
     let t = h.terminal!
     t.silentLog = true
-    let buffer = UnsafeBufferPointer(start: data, count: Int (length))
+    let buffer = UnsafeBufferPointer(start: data, count: Int(length))
     let arr = Array(buffer)
-    
-    t.feed (byteArray: arr)
+
+    t.feed(byteArray: arr)
     return 0
 }
 
 // For manually testing stuff and use the Xcode debugger
-func testInput (d: Data)
-{
-    let h = HeadlessTerminal (queue: queue) { exitCode in }
-    var data : [UInt8] = []
+func testInput(d: Data) {
+    let h = HeadlessTerminal(queue: queue) { _ in }
+    var data: [UInt8] = []
     data.append(contentsOf: d)
     let t = h.terminal!
     t.silentLog = true
-    t.feed (byteArray: data)
+    t.feed(byteArray: data)
 }
 
-func testCrashes ()
-{
+func testCrashes() {
     let crashes = [
         "crash-fb6fa24871a603f7920dd24d467c449ac5b8d893",
         "crash-f8e22628b8a2bb06d06fa9c064fe3a7363c35bde",
@@ -55,8 +52,7 @@ func testCrashes ()
         "crash-3154715068e3ec98c7b425cc0fe56c1dbd1e1f58",
         "crash-41df255a79feb00f8ded38dac7a51065a2758977",
         "crash-45157239bc429db89546e2f0fea38b26f608b8d9",
-        
-        
+
         "crash-2f5d273ae2f2bb95152905486bd9bfd8afa83c02",
         "crash-17381a13c18b7bda011f260e38952fb8fb7e4616",
         "crash-0a14a360e820c3801095d8bdbc130b3e18d55261",
@@ -87,26 +83,24 @@ func testCrashes ()
         "crash-de2a0b4222547592208f7f85e2cd5b2730194daa",
         "crash-e1f2f0f2ef07d6d728316fa1bc336e6d1d699b99",
         "crash-ec47d21af677ee8eb18f91e150cdfb5d41d931c1",
-
-        
     ]
-    
+
     for crash in crashes {
         let url = URL(fileURLWithPath: "/Users/miguel/cvs/SwiftTerm/\(crash)")
         let data: Data
         do {
-            print ("Running test \(crash)")
+            print("Running test \(crash)")
             data = try Data(contentsOf: url)
         } catch {
-            print ("Caught error loading \(crash)")
+            print("Caught error loading \(crash)")
             continue
         }
 
-        testInput (d: data)
-        
-        print ("passed crash \(crash)")
+        testInput(d: data)
+
+        print("passed crash \(crash)")
     }
-    print ("Happy!")
+    print("Happy!")
 }
 
 // testCrashes()

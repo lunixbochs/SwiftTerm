@@ -15,45 +15,45 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
     var changingSize = false
     var logging: Bool = false
     var zoomGesture: NSMagnificationGestureRecognizer?
-    
-    func sizeChanged(source: LocalProcessTerminalView, newCols: Int, newRows: Int) {
+
+    func sizeChanged(source _: LocalProcessTerminalView, newCols _: Int, newRows _: Int) {
         if changingSize {
             return
         }
         changingSize = true
-        //var border = view.window!.frame - view.frame
-        var newFrame = terminal.getOptimalFrameSize ()
+        // var border = view.window!.frame - view.frame
+        var newFrame = terminal.getOptimalFrameSize()
         let windowFrame = view.window!.frame
-        
-        newFrame = CGRect (x: windowFrame.minX, y: windowFrame.minY, width: newFrame.width, height: windowFrame.height - view.frame.height + newFrame.height)
+
+        newFrame = CGRect(x: windowFrame.minX, y: windowFrame.minY, width: newFrame.width, height: windowFrame.height - view.frame.height + newFrame.height)
 
         view.window?.setFrame(newFrame, display: true, animate: true)
         changingSize = false
     }
-    
-    func setTerminalTitle(source: LocalProcessTerminalView, title: String) {
+
+    func setTerminalTitle(source _: LocalProcessTerminalView, title: String) {
         view.window?.title = title
     }
-    
-    func processTerminated(source: TerminalView, exitCode: Int32?) {
+
+    func processTerminated(source _: TerminalView, exitCode: Int32?) {
         view.window?.close()
         if let e = exitCode {
-            print ("Process terminated with code: \(e)")
+            print("Process terminated with code: \(e)")
         } else {
-            print ("Process vanished")
+            print("Process vanished")
         }
     }
+
     var terminal: LocalProcessTerminalView!
 
     static var lastTerminal: LocalProcessTerminalView!
-    
-    func updateLogging ()
-    {
+
+    func updateLogging() {
         let path = logging ? "/Users/miguel/Downloads/Logs" : nil
-        terminal.setHostLogging (directory: path)
-        NSUserDefaultsController.shared.defaults.set (logging, forKey: "LogHostOutput")
+        terminal.setHostLogging(directory: path)
+        NSUserDefaultsController.shared.defaults.set(logging, forKey: "LogHostOutput")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -62,18 +62,17 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
         terminal.addGestureRecognizer(zoomGesture!)
         ViewController.lastTerminal = terminal
         terminal.processDelegate = self
-        terminal.feed(text: "Welcome to SwiftTerm")
-        terminal.startProcess ()
+        terminal.startProcess()
         view.addSubview(terminal)
-        
+
         logging = NSUserDefaultsController.shared.defaults.bool(forKey: "LogHostOutput")
-        updateLogging ()
+        updateLogging()
     }
-    
+
     @objc
-    func zoomGestureHandler (_ sender: NSMagnificationGestureRecognizer) {
+    func zoomGestureHandler(_ sender: NSMagnificationGestureRecognizer) {
         if sender.magnification > 0 {
-            biggerFont (sender)
+            biggerFont(sender)
         } else {
             smallerFont(sender)
         }
@@ -87,10 +86,8 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
         terminal.needsLayout = true
     }
 
-
-    @objc @IBAction
-    func set80x25 (_ source: AnyObject)
-    {
+    @IBAction
+    func set80x25(_: AnyObject) {
         terminal.resize(cols: 80, rows: 25)
     }
 
@@ -98,14 +95,13 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
     var lowerRow = 25
     var higherCol = 160
     var higherRow = 60
-    
-    func queueNextSize ()
-    {
+
+    func queueNextSize() {
         // If they requested a stop
         if resizificating == 0 {
             return
         }
-        var next = terminal.getTerminal().getDims ()
+        var next = terminal.getTerminal().getDims()
         if resizificating > 0 {
             if next.cols < higherCol {
                 next.cols += 1
@@ -121,13 +117,13 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
                 next.rows -= 1
             }
         }
-        terminal.resize (cols: next.cols, rows: next.rows)
+        terminal.resize(cols: next.cols, rows: next.rows)
         var direction = resizificating
-        
-        if next.rows == higherRow && next.cols == higherCol {
+
+        if next.rows == higherRow, next.cols == higherCol {
             direction = -1
         }
-        if next.rows == lowerRow && next.cols == lowerCol {
+        if next.rows == lowerRow, next.cols == lowerCol {
             direction = 1
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) {
@@ -135,90 +131,78 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
             self.queueNextSize()
         }
     }
-    
+
     var resizificating = 0
-    
-    @objc @IBAction
-    func resizificator (_ source: AnyObject)
-    {
+
+    @IBAction
+    func resizificator(_: AnyObject) {
         if resizificating != 1 {
             resizificating = 1
-            queueNextSize ()
+            queueNextSize()
         } else {
             resizificating = 0
         }
     }
 
-    @objc @IBAction
-    func resizificatorDown (_ source: AnyObject)
-    {
+    @IBAction
+    func resizificatorDown(_: AnyObject) {
         if resizificating != -1 {
             resizificating = -1
-            queueNextSize ()
+            queueNextSize()
         } else {
             resizificating = 0
         }
     }
 
-    @objc @IBAction
-    func allowMouseReporting (_ source: AnyObject)
-    {
-        terminal.allowMouseReporting.toggle ()
+    @IBAction
+    func allowMouseReporting(_: AnyObject) {
+        terminal.allowMouseReporting.toggle()
     }
-    
-    @objc @IBAction
-    func softReset (_ source: AnyObject)
-    {
-        terminal.getTerminal().softReset ()
+
+    @IBAction
+    func softReset(_: AnyObject) {
+        terminal.getTerminal().softReset()
         terminal.setNeedsDisplay(terminal.frame)
     }
-    
-    @objc @IBAction
-    func hardReset (_ source: AnyObject)
-    {
-        terminal.getTerminal().resetToInitialState ()
+
+    @IBAction
+    func hardReset(_: AnyObject) {
+        terminal.getTerminal().resetToInitialState()
         terminal.setNeedsDisplay(terminal.frame)
     }
-    
-    @objc @IBAction
-    func toggleOptionAsMetaKey (_ source: AnyObject)
-    {
-        terminal.optionAsMetaKey.toggle ()
+
+    @IBAction
+    func toggleOptionAsMetaKey(_: AnyObject) {
+        terminal.optionAsMetaKey.toggle()
     }
-    
-    @objc @IBAction
-    func biggerFont (_ source: AnyObject)
-    {
+
+    @IBAction
+    func biggerFont(_: AnyObject) {
         let size = terminal.font.pointSize
         guard size < 72 else {
             return
         }
-        
-        terminal.font = NSFont.monospacedSystemFont(ofSize: size+1, weight: .regular)
+
+        terminal.font = NSFont.monospacedSystemFont(ofSize: size + 1, weight: .regular)
     }
 
-    @objc @IBAction
-    func smallerFont (_ source: AnyObject)
-    {
+    @IBAction
+    func smallerFont(_: AnyObject) {
         let size = terminal.font.pointSize
         guard size > 5 else {
             return
         }
-        
-        terminal.font = NSFont.monospacedSystemFont(ofSize: size-1, weight: .regular)
+
+        terminal.font = NSFont.monospacedSystemFont(ofSize: size - 1, weight: .regular)
     }
 
-    @objc @IBAction
-    func defaultFontSize  (_ source: AnyObject)
-    {
+    @IBAction
+    func defaultFontSize(_: AnyObject) {
         terminal.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
     }
-    
 
-    @objc @IBAction
-    func addTab (_ source: AnyObject)
-    {
-        
+    @IBAction
+    func addTab(_: AnyObject) {
 //        if let win = view.window {
 //            win.tabbingMode = .preferred
 //            if let wc = win.windowController {
@@ -226,7 +210,7 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
 //                    do {
 //                        let x = Document()
 //                        x.makeWindowControllers()
-//                        
+//
 //                        try NSDocumentController.shared.newDocument(self)
 //                    } catch {}
 //                    print ("\(d.debugDescription)")
@@ -242,9 +226,8 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
 //            }
 //        }
     }
-    
-    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool
-    {
+
+    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
         if item.action == #selector(debugToggleHostLogging(_:)) {
             if let m = item as? NSMenuItem {
                 m.state = logging ? NSControl.StateValue.on : NSControl.StateValue.off
@@ -272,13 +255,10 @@ class ViewController: NSViewController, LocalProcessTerminalViewDelegate, NSUser
         }
         return true
     }
-    
-    @objc @IBAction
-    func debugToggleHostLogging (_ source: AnyObject)
-    {
+
+    @IBAction
+    func debugToggleHostLogging(_: AnyObject) {
         logging = !logging
         updateLogging()
     }
-    
 }
-

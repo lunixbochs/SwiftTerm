@@ -10,44 +10,42 @@ import Foundation
 
 /// This option set describes the character style for a cell, this includes
 /// information about the font to use as well as decorations on the text
-public struct CharacterStyle : OptionSet, Hashable {
+public struct CharacterStyle: OptionSet, Hashable {
     public let rawValue: UInt8
-    
+
     /**
      * Constructs a character attribute from a raw value.
      */
-    public init (rawValue: UInt8)
-    {
+    public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-    
+
     /**
      * Constructs the CharacterStyle from a CharData.attribute that encodes the foreground, background and flags
      */
-    public init (attribute: Int32)
-    {
-        rawValue = UInt8 ((attribute >> 18) & 0xff)
+    public init(attribute: Int32) {
+        rawValue = UInt8((attribute >> 18) & 0xFF)
     }
-    
+
     /// Empty style
-    public static let none = CharacterStyle ([])
+    public static let none = CharacterStyle([])
     /// Use a bold font
-    public static let bold = CharacterStyle (rawValue: 1)
+    public static let bold = CharacterStyle(rawValue: 1)
     /// Underline the currentlin line
-    public static let underline = CharacterStyle (rawValue: 2)
+    public static let underline = CharacterStyle(rawValue: 2)
     /// The text should blink
-    public static let blink = CharacterStyle (rawValue: 4)
+    public static let blink = CharacterStyle(rawValue: 4)
     /// The text should be inverted (background and foreground are swapped)
-    public static let inverse = CharacterStyle (rawValue: 8)
+    public static let inverse = CharacterStyle(rawValue: 8)
     /// The text should be replaced with white space - there is a debate as to what to do about it when copy/pasting
     /// code as different terminal emulators have taken conflicting takes, so your UI driver might have to choose
-    public static let invisible = CharacterStyle (rawValue: 16)
+    public static let invisible = CharacterStyle(rawValue: 16)
     /// Font should be rendered more lightly, implementation specific
-    public static let dim = CharacterStyle (rawValue: 32)
+    public static let dim = CharacterStyle(rawValue: 32)
     /// Use italic fonts
-    public static let italic = CharacterStyle (rawValue: 64)
+    public static let italic = CharacterStyle(rawValue: 64)
     /// Cross out the text
-    public static let crossedOut = CharacterStyle (rawValue: 128)
+    public static let crossedOut = CharacterStyle(rawValue: 128)
 }
 
 ///
@@ -64,100 +62,94 @@ public struct Attribute: Equatable, Hashable {
         /// we reserve two values "defaultForeground" and "defaultBackground" that
         /// indicate that the terminal can pick the right values for those.
         case ansi256(code: UInt8)
-        
+
         /// This means that the color has been configured to be a 24-bit true color
         /// and has 8 bits for red, green and blue
         case trueColor(red: UInt8, green: UInt8, blue: UInt8)
-        
+
         /// Indicates that the cell uses the default foreground color
         case defaultColor
-        
+
         /// Indicates that the cell uses teh default backgrond color (also used as the inverse color)
         case defaultInvertedColor
-        
-        public static func ==(lhs: Color, rhs: Color) -> Bool
-        {
+
+        public static func == (lhs: Color, rhs: Color) -> Bool {
             switch (lhs, rhs) {
-            case (.ansi256(let lc), .ansi256(let rc)):
+            case let (.ansi256(lc), .ansi256(rc)):
                 return lc == rc
             case (.defaultColor, .defaultColor):
                 return true
             case (.defaultInvertedColor, .defaultInvertedColor):
                 return true
-            case (.trueColor(let lr, let lg, let lb), .trueColor(let rr, let rg, let rb)):
+            case let (.trueColor(lr, lg, lb), .trueColor(rr, rg, rb)):
                 return lr == rr && lg == rg && lb == rb
             default:
                 return false
             }
         }
     }
-    
+
     /// The empty attribute is configured to be use the defaultColor for the foreground, and the
     /// defaultInvertedColor for the background and an emptu style
-    public static let empty = Attribute (fg: .defaultColor, bg: .defaultInvertedColor, style: .none)
-    
+    public static let empty = Attribute(fg: .defaultColor, bg: .defaultInvertedColor, style: .none)
+
     /// Foreground and background colors
     public private(set) var fg, bg: Color
     // The cell attributes
     public private(set) var style: CharacterStyle
-    
-    public static func ==(lhs: Attribute, rhs: Attribute) -> Bool
-    {
+
+    public static func == (lhs: Attribute, rhs: Attribute) -> Bool {
         lhs.style == rhs.style && lhs.fg == rhs.fg && lhs.bg == rhs.bg
     }
-    
+
     // Returns an attribute with just the colors
-    func justColor () -> Attribute
-    {
-        Attribute (fg: fg, bg: bg, style: .none)
+    func justColor() -> Attribute {
+        Attribute(fg: fg, bg: bg, style: .none)
     }
-    
+
     // Temporary, longer term in Attribute we will add a proper encoding
-    func toSgr () -> String
-    {
+    func toSgr() -> String {
         var result = "0"
-        
+
         if style.contains(.bold) {
             result += ";1"
         }
-        if style.contains (.underline) {
+        if style.contains(.underline) {
             result += ";4"
         }
-        if style.contains (.blink) {
+        if style.contains(.blink) {
             result += ";5"
         }
-        if style.contains (.inverse) {
+        if style.contains(.inverse) {
             result += ";7"
         }
-        if style.contains (.invisible) {
+        if style.contains(.invisible) {
             result += ";8"
         }
-        
-        print ("Attribute.toSgr() BROKEN - THIS ONLY HANDLES 8 bits")
+
+        print("Attribute.toSgr() BROKEN - THIS ONLY HANDLES 8 bits")
         switch fg {
-        case .ansi256(let c):
+        case let .ansi256(c):
             if c > 16 {
                 result += ";38;5;\(c)"
             } else {
                 result += ";\(c >= 8 ? 9 : 3)\(c >= 8 ? c - 8 : c);"
             }
-        case .trueColor(let r, let g, let b):
-            print ("Here  is where truecolor needs to be handled \(r), \(g), \(b)")
-            break
+        case let .trueColor(r, g, b):
+            print("Here  is where truecolor needs to be handled \(r), \(g), \(b)")
         default:
             break
         }
-        
+
         switch bg {
-        case .ansi256(let c):
+        case let .ansi256(c):
             if c > 16 {
                 result += ";48;5;\(c)"
             } else {
                 result += ";\(c >= 8 ? 10 : 4)\(c >= 8 ? c - 8 : c);"
             }
-        case .trueColor(let r, let g, let b):
-            print ("Here  is where truecolor needs to be handled \(r), \(g), \(b)")
-            break
+        case let .trueColor(r, g, b):
+            print("Here  is where truecolor needs to be handled \(r), \(g), \(b)")
         default:
             break
         }
@@ -176,39 +168,36 @@ public struct Attribute: Equatable, Hashable {
 /// it could in theory be changed to be 24 bits without much trouble
 public struct TinyAtom {
     var code: UInt16
-    static var map: [UInt16:Any] = [:]
+    static var map: [UInt16: Any] = [:]
     static var lastUsed: Int = 0
     static var lastCollected: Int = 0
-    static var empty = TinyAtom (code: 0)
-   
-    private init(code: UInt16)
-    {
+    static var empty = TinyAtom(code: 0)
+
+    private init(code: UInt16) {
         self.code = code
     }
-    
+
     /// Returns the TinyAtom associated with the specified url, or nil if we ran out of space
-    public static func lookup (value: Any) -> TinyAtom? {
+    public static func lookup(value: Any) -> TinyAtom? {
         let next = lastUsed + 1
         if next < UInt16.max {
-            map [UInt16 (next)] = value
+            map[UInt16(next)] = value
             lastUsed = next
-            return TinyAtom (code: UInt16 (next))
+            return TinyAtom(code: UInt16(next))
         }
         return nil
     }
-    
+
     public static func release(code: UInt16) {
         map.removeValue(forKey: code)
     }
-    
+
     /// Returns the target for the TinyAtom
     public var target: Any? {
-        get {
-            if code == 0 {
-                return nil
-            }
-            return TinyAtom.map [code]
+        if code == 0 {
+            return nil
         }
+        return TinyAtom.map[code]
     }
 }
 
@@ -223,7 +212,7 @@ public struct TinyAtom {
  *
  * It is possible to change the value of the stored character by calling the `setValue` method.
  */
-public struct CharData : CustomDebugStringConvertible {
+public struct CharData: CustomDebugStringConvertible {
     public var debugDescription: String {
         let ch: Character
         if let scalar = UnicodeScalar(Int(code)) {
@@ -231,126 +220,115 @@ public struct CharData : CustomDebugStringConvertible {
         } else {
             ch = "?"
         }
-        
+
         return "CharData: \(code) \(ch)"
     }
-    
+
     static let maxRune = 1 << 22
-    
+
     // Contains the character to index mapping
-    static var charToIndexMap: [Character:Int32] = [:]
-    
+    static var charToIndexMap: [Character: Int32] = [:]
+
     // Contains the index to character mapping, could be a plain array
     static var indexToCharMap: [Int32: Character] = [:]
-    static var lastCharIndex: Int32 = (1 << 22)+1
-    
-    
+    static var lastCharIndex: Int32 = (1 << 22) + 1
+
     static let defaultAttr = Attribute(fg: .defaultColor, bg: .defaultColor, style: .none)
     static let invertedAttr = Attribute(fg: .defaultInvertedColor, bg: .defaultInvertedColor, style: .none)
-    
+
     // Contains a rune, or a pointer into a Grapheme Cluster
     var code: Int32
-    
-    ///Contains the number of columns used by the `Character` stored in this `CharData` on the screen.
+
+    /// Contains the number of columns used by the `Character` stored in this `CharData` on the screen.
     public private(set) var width: Int8
-    
+
     // This contains an assigned key
     var payload: TinyAtom
-    
+
     var unused: UInt8 // Purely here to align to 16 bytes
-    
+
     /// The color and character attributes for the cell
     public var attribute: Attribute
-    
+
     /// Initializes a new instance of the CharData structure with the provided attribute, character and the dimension
     /// - Parameter attribute: an attribute containing the color and style attributes for the cell
     /// - Parameter char: the character that will be stored in this cell
     /// - Parameter size: the number of columns used by the `Character` stored in this `CharData` on the screen.
-    init (attribute: Attribute, char: Character, size: Int8 = 1)
-    {
+    init(attribute: Attribute, char: Character, size: Int8 = 1) {
         self.attribute = attribute
         if char.utf16.count == 1 {
-            code = Int32 (char.utf16.first!)
+            code = Int32(char.utf16.first!)
         } else {
-            if let existingIdx = CharData.charToIndexMap [char] {
+            if let existingIdx = CharData.charToIndexMap[char] {
                 code = existingIdx
             } else {
-                CharData.charToIndexMap [char] = CharData.lastCharIndex
-                CharData.indexToCharMap [CharData.lastCharIndex] = char
+                CharData.charToIndexMap[char] = CharData.lastCharIndex
+                CharData.indexToCharMap[CharData.lastCharIndex] = char
                 code = CharData.lastCharIndex
                 CharData.lastCharIndex = CharData.lastCharIndex + 1
             }
         }
-        width = Int8 (size)
+        width = Int8(size)
         payload = TinyAtom.empty
         unused = 0
     }
 
     // Empty cell sets the code to zero
-    init (attribute: Attribute)
-    {
+    init(attribute: Attribute) {
         self.attribute = attribute
         code = 0
         width = 1
         payload = TinyAtom.empty
         unused = 0
     }
-    
+
     public var isSimpleRune: Bool {
-        get {
-            return code < CharData.maxRune
-        }
+        code < CharData.maxRune
     }
 
     /// Sets the Url token for the this CharData.
-    mutating public func setPayload (atom: TinyAtom)
-    {
-        self.payload = atom
+    public mutating func setPayload(atom: TinyAtom) {
+        payload = atom
     }
-    
-    public func getPayload () -> Any?
-    {
-         payload.target
+
+    public func getPayload() -> Any? {
+        payload.target
     }
-    
+
     public var hasPayload: Bool {
-        get {
-            return payload.code != 0
-        }
+        payload.code != 0
     }
-    
+
     /// The `Null` character can be used when filling up parts of the screeb
-    public static var Null : CharData = CharData (attribute: defaultAttr)
-    
+    public static var Null = CharData(attribute: defaultAttr)
+
     /// Updates the contents of this CharData with a new character.
     /// - Parameter char: the new character that will be stored
     /// - Paramerter size: the number of fixed sized columns this character will take on the screen
-    mutating public func setValue (char: Character, size: Int32)
-    {
+    public mutating func setValue(char: Character, size: Int32) {
         if char.utf16.count == 1 {
-            self.code = Int32 (char.utf16.first!)
+            code = Int32(char.utf16.first!)
         } else {
-            if let existingIdx = CharData.charToIndexMap [char] {
+            if let existingIdx = CharData.charToIndexMap[char] {
                 code = existingIdx
             } else {
-                CharData.charToIndexMap [char] = CharData.lastCharIndex
-                CharData.indexToCharMap [CharData.lastCharIndex] = char
+                CharData.charToIndexMap[char] = CharData.lastCharIndex
+                CharData.indexToCharMap[CharData.lastCharIndex] = char
                 code = CharData.lastCharIndex
                 CharData.lastCharIndex = CharData.lastCharIndex + 1
             }
         }
-        width = Int8 (size)
+        width = Int8(size)
     }
-    
+
     /// Use this method to retrieve the Character stored in the CharData
-    public func getCharacter () -> Character
-    {
+    public func getCharacter() -> Character {
         if code > CharData.maxRune {
             // This is an invariant - no code can be stored without the equivalent being tracked, but for the sake
             // of not having a "!" return a space.
-            return CharData.indexToCharMap [code] ?? " "
+            return CharData.indexToCharMap[code] ?? " "
         }
-        if let c = Unicode.Scalar (UInt32 (code)) {
+        if let c = Unicode.Scalar(UInt32(code)) {
             return Character(c)
         } else {
             return " "
@@ -361,11 +339,11 @@ public struct CharData : CustomDebugStringConvertible {
 // these are used for images inside terminal created from sixels
 public class ImageCell {
     let image: TTImage
-    
+
     // cell size
     var width: Int?
     var height: Int?
-    
+
     public init(_ image: TTImage) {
         self.image = image
     }

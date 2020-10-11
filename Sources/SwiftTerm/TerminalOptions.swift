@@ -39,16 +39,16 @@ public struct TerminalOptions {
     public var tabStopWidth: Int
 
     /// Default options
-    public static let `default` = TerminalOptions.init(cols: 80,
-                                                       rows: 25,
-                                                       convertEol: true,
-                                                       termName: "xterm-color",
-                                                       cursorStyle: .blinkBlock,
-                                                       screenReaderMode: false,
-                                                       scrollback: 500,
-                                                       tabStopWidth: 8)
+    public static let `default` = TerminalOptions(cols: 80,
+                                                  rows: 25,
+                                                  convertEol: true,
+                                                  termName: "xterm-color",
+                                                  cursorStyle: .blinkBlock,
+                                                  screenReaderMode: false,
+                                                  scrollback: 500,
+                                                  tabStopWidth: 8)
 
-  public init(cols: Int = Self.default.cols, rows: Int = Self.default.rows, convertEol: Bool = Self.default.convertEol, termName: String = Self.default.termName, cursorStyle: CursorStyle = Self.default.cursorStyle, screenReaderMode: Bool = Self.default.screenReaderMode, scrollback: Int = Self.default.scrollback, tabStopWidth: Int = Self.default.tabStopWidth) {
+    public init(cols: Int = Self.default.cols, rows: Int = Self.default.rows, convertEol: Bool = Self.default.convertEol, termName: String = Self.default.termName, cursorStyle: CursorStyle = Self.default.cursorStyle, screenReaderMode: Bool = Self.default.screenReaderMode, scrollback: Int = Self.default.scrollback, tabStopWidth: Int = Self.default.tabStopWidth) {
         self.cols = cols
         self.rows = rows
         self.convertEol = convertEol

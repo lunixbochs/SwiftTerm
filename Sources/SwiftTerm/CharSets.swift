@@ -9,15 +9,14 @@
 import Foundation
 
 class CharSets {
-    public static var all: [UInt8:[UInt8:String]] = initAll ()
-    
+    public static var all: [UInt8: [UInt8: String]] = initAll()
+
     // This is the "B" charset, null
-    public static var defaultCharset: [UInt8:String]? = nil
-    
-    static func initAll () -> [UInt8:[UInt8:String]]
-    {
-        var all: [UInt8:[UInt8:String]] = [:]
-        
+    public static var defaultCharset: [UInt8: String]?
+
+    static func initAll() -> [UInt8: [UInt8: String]] {
+        var all: [UInt8: [UInt8: String]] = [:]
+
         //
         // DEC Special Character and Line Drawing Set.
         // Reference: http://vt100.net/docs/vt102-ug/table5-13.html
@@ -28,8 +27,8 @@ class CharSets {
         // when running vttest however.
         // The table below now uses xterm's output from vttest.
         //
-        all [Character("0").asciiValue!] = [
-            Character("`").asciiValue!: "\u{25c6}",// '◆'
+        all[Character("0").asciiValue!] = [
+            Character("`").asciiValue!: "\u{25c6}", // '◆'
             Character("a").asciiValue!: "\u{2592}", // '▒'
             Character("b").asciiValue!: "\u{2409}", // [ht]
             Character("c").asciiValue!: "\u{240c}", // [ff]
@@ -59,33 +58,33 @@ class CharSets {
             Character("{").asciiValue!: "\u{03c0}", // 'π{'
             Character("|").asciiValue!: "\u{2260}", // '≠'
             Character("}").asciiValue!: "\u{00a3}", // '£{'
-            Character("~").asciiValue!: "\u{00b7}"  // '·'
+            Character("~").asciiValue!: "\u{00b7}", // '·'
         ]
-        
+
         // (DEC Alternate character ROM special graphics)
-        all [Character("2").asciiValue!] = all [Character("0").asciiValue!]
-        
+        all[Character("2").asciiValue!] = all[Character("0").asciiValue!]
+
         /**
          * British character set
          * ESC (A
          * Reference: http://vt100.net/docs/vt220-rm/table2-5.html
          */
-        all [Character("A").asciiValue!] = [
-            Character("#").asciiValue!: "£"
+        all[Character("A").asciiValue!] = [
+            Character("#").asciiValue!: "£",
         ]
-        
+
         /**
          * United States character set
          * ESC (B
          */
-        all [Character("B").asciiValue!] = [:]
-        
+        all[Character("B").asciiValue!] = [:]
+
         /**
-        * Dutch character set
-        * ESC (4
-        * Reference: http://vt100.net/docs/vt220-rm/table2-6.html
-        */
-        all [Character("4").asciiValue!] = [
+         * Dutch character set
+         * ESC (4
+         * Reference: http://vt100.net/docs/vt220-rm/table2-6.html
+         */
+        all[Character("4").asciiValue!] = [
             Character("#").asciiValue!: "£",
             Character("@").asciiValue!: "¾",
             Character("[").asciiValue!: "ĳ",
@@ -94,15 +93,15 @@ class CharSets {
             Character("{").asciiValue!: "¨",
             Character("|").asciiValue!: "f",
             Character("}").asciiValue!: "¼",
-            Character("~").asciiValue!: "´"
+            Character("~").asciiValue!: "´",
         ]
-        
+
         /**
          * Finnish character set
          * ESC (C or ESC (5
          * Reference: http://vt100.net/docs/vt220-rm/table2-7.html
          */
-        all [Character("5").asciiValue!] = [
+        all[Character("5").asciiValue!] = [
             Character("[").asciiValue!: "Ä",
             Character("\\").asciiValue!: "Ö",
             Character("]").asciiValue!: "Å",
@@ -111,16 +110,16 @@ class CharSets {
             Character("{").asciiValue!: "ä",
             Character("|").asciiValue!: "ö",
             Character("}").asciiValue!: "å",
-            Character("~").asciiValue!: "ü"
+            Character("~").asciiValue!: "ü",
         ]
-        all [Character("C").asciiValue!] = all [Character("5").asciiValue!]
+        all[Character("C").asciiValue!] = all[Character("5").asciiValue!]
 
         /**
-        * French character set
-        * ESC (R
-        * Reference: http://vt100.net/docs/vt220-rm/table2-8.html
-        */
-        all [Character("R").asciiValue!] = [
+         * French character set
+         * ESC (R
+         * Reference: http://vt100.net/docs/vt220-rm/table2-8.html
+         */
+        all[Character("R").asciiValue!] = [
             Character("#").asciiValue!: "£",
             Character("@").asciiValue!: "à",
             Character("[").asciiValue!: "°",
@@ -129,15 +128,15 @@ class CharSets {
             Character("{").asciiValue!: "é",
             Character("|").asciiValue!: "ù",
             Character("}").asciiValue!: "è",
-            Character("~").asciiValue!: "¨"
+            Character("~").asciiValue!: "¨",
         ]
-        
+
         /**
          * French Canadian character set
          * ESC (Q
          * Reference: http://vt100.net/docs/vt220-rm/table2-9.html
          */
-        all [Character("Q").asciiValue!] = [
+        all[Character("Q").asciiValue!] = [
             Character("@").asciiValue!: "à",
             Character("[").asciiValue!: "â",
             Character("\\").asciiValue!: "ç",
@@ -147,15 +146,15 @@ class CharSets {
             Character("{").asciiValue!: "é",
             Character("|").asciiValue!: "ù",
             Character("}").asciiValue!: "è",
-            Character("~").asciiValue!: "û"
+            Character("~").asciiValue!: "û",
         ]
-        
+
         /**
          * German character set
          * ESC (K
          * Reference: http://vt100.net/docs/vt220-rm/table2-10.html
          */
-        all [Character("K").asciiValue!] = [
+        all[Character("K").asciiValue!] = [
             Character("@").asciiValue!: "§",
             Character("[").asciiValue!: "Ä",
             Character("\\").asciiValue!: "Ö",
@@ -163,15 +162,15 @@ class CharSets {
             Character("{").asciiValue!: "ä",
             Character("|").asciiValue!: "ö",
             Character("}").asciiValue!: "ü",
-            Character("~").asciiValue!: "ß"
+            Character("~").asciiValue!: "ß",
         ]
-        
+
         /**
          * Italian character set
          * ESC (Y
          * Reference: http://vt100.net/docs/vt220-rm/table2-11.html
          */
-        all [Character("Y").asciiValue!] = [
+        all[Character("Y").asciiValue!] = [
             Character("#").asciiValue!: "£",
             Character("@").asciiValue!: "§",
             Character("[").asciiValue!: "°",
@@ -181,15 +180,15 @@ class CharSets {
             Character("{").asciiValue!: "à",
             Character("|").asciiValue!: "ò",
             Character("}").asciiValue!: "è",
-            Character("~").asciiValue!: "ì"
+            Character("~").asciiValue!: "ì",
         ]
-    
+
         /**
          * Norwegian/Danish character set
          * ESC (E or ESC (6
          * Reference: http://vt100.net/docs/vt220-rm/table2-12.html
          */
-        all [Character("6").asciiValue!] = [
+        all[Character("6").asciiValue!] = [
             Character("@").asciiValue!: "Ä",
             Character("[").asciiValue!: "Æ",
             Character("\\").asciiValue!: "Ø",
@@ -199,16 +198,16 @@ class CharSets {
             Character("{").asciiValue!: "æ",
             Character("|").asciiValue!: "ø",
             Character("}").asciiValue!: "å",
-            Character("~").asciiValue!: "ü"
+            Character("~").asciiValue!: "ü",
         ]
-        all [Character("E").asciiValue!] = all [Character("6").asciiValue!]
-        
+        all[Character("E").asciiValue!] = all[Character("6").asciiValue!]
+
         /**
          * Spanish character set
          * ESC (Z
          * Reference: http://vt100.net/docs/vt220-rm/table2-13.html
          */
-        all [Character("Z").asciiValue!] = [
+        all[Character("Z").asciiValue!] = [
             Character("#").asciiValue!: "£",
             Character("@").asciiValue!: "§",
             Character("[").asciiValue!: "¡",
@@ -216,7 +215,7 @@ class CharSets {
             Character("]").asciiValue!: "¿",
             Character("{").asciiValue!: "°",
             Character("|").asciiValue!: "ñ",
-            Character("}").asciiValue!: "ç"
+            Character("}").asciiValue!: "ç",
         ]
 
         /**
@@ -224,7 +223,7 @@ class CharSets {
          * ESC (H or ESC (7
          * Reference: http://vt100.net/docs/vt220-rm/table2-14.html
          */
-        all [Character("7").asciiValue!] = [
+        all[Character("7").asciiValue!] = [
             Character("@").asciiValue!: "É",
             Character("[").asciiValue!: "Ä",
             Character("\\").asciiValue!: "Ö",
@@ -234,16 +233,16 @@ class CharSets {
             Character("{").asciiValue!: "ä",
             Character("|").asciiValue!: "ö",
             Character("}").asciiValue!: "å",
-            Character("~").asciiValue!: "ü"
+            Character("~").asciiValue!: "ü",
         ]
-        all [Character("H").asciiValue!] = all [Character("7").asciiValue!]
-        
+        all[Character("H").asciiValue!] = all[Character("7").asciiValue!]
+
         /**
          * Swiss character set
          * ESC (=
          * Reference: http://vt100.net/docs/vt220-rm/table2-15.html
          */
-        all [Character("=").asciiValue!] = [
+        all[Character("=").asciiValue!] = [
             Character("#").asciiValue!: "ù",
             Character("@").asciiValue!: "à",
             Character("[").asciiValue!: "é",
@@ -255,7 +254,7 @@ class CharSets {
             Character("{").asciiValue!: "ä",
             Character("|").asciiValue!: "ö",
             Character("}").asciiValue!: "ü",
-            Character("~").asciiValue!: "û"
+            Character("~").asciiValue!: "û",
         ]
         return all
     }

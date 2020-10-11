@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,8 +35,8 @@
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                        <menuItem title="Hide Others" keyEquivalent="" id="Vdr-fp-XzO">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" control="YES" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="hideOtherApplications:" target="Ady-hI-5gd" id="VT4-aY-XCT"/>
                                             </connections>
@@ -343,44 +344,6 @@ GQ
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Debug" id="xXM-Rf-SN3">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Debug" id="PZO-Mh-HgN">
-                                    <items>
-                                        <menuItem title="Log host output to ~/Downloads/Logs" tag="1000" id="a46-bA-6WQ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="debugToggleHostLogging:" target="Ady-hI-5gd" id="LMD-BF-wDc"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Show Debug Buffer" id="k5i-qy-zy2">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <segue destination="nkh-mY-QjY" kind="show" id="adp-CF-3zb"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="k6s-LU-zTp"/>
-                                        <menuItem title="Set size to 80x25" id="2R6-Zv-UF1">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="set80x25:" target="Ady-hI-5gd" id="SQb-8p-G7X"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Resizificate-up" id="SKl-Ia-pof">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="resizificator:" target="Ady-hI-5gd" id="pX8-9D-PGr"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Resizificate-down" id="Qxi-Mx-PvP">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="resizificatorDown:" target="Ady-hI-5gd" id="oOh-5S-lVH"/>
                                             </connections>
                                         </menuItem>
                                     </items>
